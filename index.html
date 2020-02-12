@@ -1,41 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-      <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
+      integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <title>Document</title>
+    <style>
+      .jumbotron {
+        background-color: grey;
+      }
+    </style>
+    <title>Experience the Music</title>
   </head>
   <body>
     <div class="jumbotron">
-      <h1>Experiance the musik</h1>
-      <input type="text" >
-      <input type="submit" type ="text" ><type>
+      <h1>Experience the Music</h1>
+      <input type="text" id="input-box" />
+      <input type="submit" type="text" id="submit-button" />
     </div>
-  
+    <div class="justify-content-center" id="information"></div>
+    <div id="concerts"></div>
+
     <script>
       // bands in town
-      var queryURL =
-        "https://rest.bandsintown.com/artists/" +
-        artist +
-        "/events?app_id=codingbootcamp";
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) {});
+      $("#submit-button").on("click", function() {
+        let artist = $("#input-box").val();
+        var queryURL =
+          "https://rest.bandsintown.com/artists/" +
+          artist +
+          "/events?app_id=codingbootcamp";
+        $.ajax({
+          url: queryURL,
+          method: "GET"
+        }).then(function(response) {
+          console.log(response[0].artist);
+          let artistName = response[0].artist.name;
+          let header = $("<h1>");
+          header.text(artistName);
+          $("#information").prepend(header);
 
-      var queryURL =
-        "https://rest.bandsintown.com/artists/" +
-        artist +
-        "/events?app_id=codingbootcamp";
-      $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) {});
+          let artistImage = $("<img>");
+          artistImage.attr("src", response[0].artist.image_url);
+          artistImage.attr("alt", "Artist image");
+          artistImage.attr("width", "400");
+          artistImage.attr("height", "400");
+          $("#information").append(artistImage);
+
+          let anchorTag = $("<a>");
+          anchorTag.text("Visit the artist's facebook page");
+          anchorTag.attr("href", response[0].artist.facebook_page_url);
+          anchorTag.attr("target", "_blank");
+          $("#information").append("<br>");
+          $("#information").append(anchorTag);
+        });
+      });
     </script>
   </body>
 </html>
