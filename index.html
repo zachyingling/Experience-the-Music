@@ -12,10 +12,30 @@
   </head>
   <body>
     <div class="jumbotron">
-          <h1>Experiance the musik</h1>
-          <input type="text" >
-          <input type="submit" type ="text" ><type>
+      <h1>Experiance the musik</h1>
+      <input type="text" >
+      <input type="submit" type ="text" ><type>
+    </div>
+  
+    <script>
+      // bands in town
+      var queryURL =
+        "https://rest.bandsintown.com/artists/" +
+        artist +
+        "/events?app_id=codingbootcamp";
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) {});
 
-        </div>
+      var queryURL =
+        "https://rest.bandsintown.com/artists/" +
+        artist +
+        "/events?app_id=codingbootcamp";
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) {});
+    </script>
   </body>
 </html>
