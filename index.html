@@ -44,6 +44,7 @@
           url: queryURL,
           method: "GET"
         }).then(function(response) {
+          $("#information").empty();
           console.log(response[0].artist);
           let artistName = response[0].artist.name;
           let header = $("<h1>");
