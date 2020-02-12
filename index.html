@@ -21,15 +21,16 @@
         background-color: grey;
       }
     </style>
-    <title>Document</title>
+    <title>Experience the Music</title>
   </head>
   <body>
     <div class="jumbotron">
-      <h1>Experiance the music</h1>
+      <h1>Experience the Music</h1>
       <input type="text" id="input-box" />
       <input type="submit" type="text" id="submit-button" />
     </div>
-    <div id="information"></div>
+    <div class="justify-content-center" id="information"></div>
+    <div id="concerts"></div>
 
     <script>
       // bands in town
@@ -43,7 +44,25 @@
           url: queryURL,
           method: "GET"
         }).then(function(response) {
-          console.log(response);
+          console.log(response[0].artist);
+          let artistName = response[0].artist.name;
+          let header = $("<h1>");
+          header.text(artistName);
+          $("#information").prepend(header);
+
+          let artistImage = $("<img>");
+          artistImage.attr("src", response[0].artist.image_url);
+          artistImage.attr("alt", "Artist image");
+          artistImage.attr("width", "400");
+          artistImage.attr("height", "400");
+          $("#information").append(artistImage);
+
+          let anchorTag = $("<a>");
+          anchorTag.text("Visit the artist's facebook page");
+          anchorTag.attr("href", response[0].artist.facebook_page_url);
+          anchorTag.attr("target", "_blank");
+          $("#information").append("<br>");
+          $("#information").append(anchorTag);
         });
       });
     </script>
