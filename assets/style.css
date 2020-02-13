@@ -1,0 +1,49 @@
+* {
+  text-align: center;
+}
+
+/* Utility */
+.box {
+  margin: 20px 0px;
+  background-color: #5e7585;
+  padding: 40px;
+  border-radius: 15px;
+}
+
+.outline {
+  border: solid 4px black;
+}
+
+.nopadding {
+  padding: 0px !important;
+}
+
+/* Top Section */
+#title {
+  margin-bottom: 20px;
+}
+
+/* Img/Bio Section */
+.bioDiv {
+  margin-right: 30px;
+  margin-left: 15px;
+}
+
+.imgDiv {
+  margin-right: 15px;
+  margin-left: 30px;
+}
+
+#img {
+  width: 400px;
+  height: 300px;
+}
+
+/* Carousel */
+.d-flex {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.equal {
+  height: 95%;
+}
