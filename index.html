@@ -31,8 +31,10 @@
     <!-- HEADER -->
     <div class="container box">
       <h1 id="title">Experience The Music</h1>
-      <input type="text" />
-      <input class="my-4" type="submit" type="text" />
+      <form>
+        <input type="text" />
+        <input class="my-4" type="submit" type="text" id="submit-button" />
+      </form>
       <div id="buttons" class="mb-4">
         <button type="button" class="btn btn-info Albums">
           Albums
@@ -233,41 +235,7 @@
       </div>
     </div>
 
-    <script>
-      // bands in town
-      $('#submit-button').on('click', function() {
-        let artist = $('#input-box').val();
-        var queryURL =
-          'https://rest.bandsintown.com/artists/' +
-          artist +
-          '/events?app_id=codingbootcamp';
-        $.ajax({
-          url: queryURL,
-          method: 'GET'
-        }).then(function(response) {
-          $('#information').empty();
-          console.log(response[0].artist);
-          let artistName = response[0].artist.name;
-          let header = $('<h1>');
-          header.text(artistName);
-          $('#information').prepend(header);
-
-          let artistImage = $('<img>');
-          artistImage.attr('src', response[0].artist.image_url);
-          artistImage.attr('alt', 'Artist image');
-          artistImage.attr('width', '400');
-          artistImage.attr('height', '400');
-          $('#information').append(artistImage);
-
-          let anchorTag = $('<a>');
-          anchorTag.text("Visit the artist's facebook page");
-          anchorTag.attr('href', response[0].artist.facebook_page_url);
-          anchorTag.attr('target', '_blank');
-          $('#information').append('<br>');
-          $('#information').append(anchorTag);
-        });
-      });
-    </script>
+    <script src="assets/logic.js"></script>
     <!-- For YouTube Access -->
     <script src="https://apis.google.com/js/client.js?onload=init"></script>
   </body>
