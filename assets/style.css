@@ -47,3 +47,11 @@
 .equal {
   height: 95%;
 }
+
+.display-none {
+  display: none;
+}
+
+.display-all {
+  display: block;
+}
