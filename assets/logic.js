@@ -8,15 +8,29 @@ $("#submit-button").on("click", function(e) {
     artist +
     "/events?app_id=codingbootcamp";
 
-  $.ajax({
-    url: queryURL,
-    method: "GET"
-  }).then(function(response) {
-    console.log(response);
-    if (artist === "" || response.length === 0) {
-      // Modal
-    } else {
+  if (artist === "") {
+    // Modal
+    $("#alert-message").text("Please input an artist");
+    $("#alert-message").attr("class", "alert alert-danger display-all");
+    setTimeout(function() {
+      $("#alert-message").attr("class", "alert alert-danger display-none");
+    }, 5000);
+  } else {
+    $.ajax({
+      url: queryURL,
+      method: "GET",
+      error: function() {
+        $("#alert-message").text("Your artist wasn't found.");
+        $("#alert-message").attr("class", "alert alert-danger display-all");
+        setTimeout(function() {
+          $("#alert-message").attr("class", "alert alert-danger display-none");
+        }, 5000);
+      }
+    }).then(function(response) {
+      console.log(response);
+      // Fix this; response gets a 404 not 0 length
       $(".display-none").attr("class", "display-all");
+      $("#alert-message").attr("class", "alert alert-danger display-none");
       let numEvents = response.length;
       // Putting artist info from bands in town on page
       $("#img").attr("src", response[0].artist.image_url);
@@ -49,8 +63,8 @@ $("#submit-button").on("click", function(e) {
         $("#tour-dates").append(newRow);
       }
       youtubeCall();
-    }
-  });
+    });
+  }
 });
 
 // Youtube functionality
@@ -59,13 +73,33 @@ function youtubeCall() {
   var request = gapi.client.youtube.search.list({
     part: "snippet",
     type: "video",
-    q: encodeURIComponent($("#search").val()).replace(/%20/g, "+"),
+    q: encodeURIComponent($("#input-box").val()).replace(/%20/g, "+"),
     maxResults: 5,
     order: "viewCount"
   });
   //execute request
   request.execute(function(response) {
     console.log(response);
+    console.log(response.items[0].id.videoId);
+
+    // Making a new iframe
+    $("#iframe").empty();
+    for (let i = 0; i < response.items.length; i++) {
+      let newIframe = $("<iframe>");
+      newIframe.attr("width", "250");
+      newIframe.attr("height", "150");
+      newIframe.attr(
+        "src",
+        "https://www.youtube.com/embed/" + response.items[i].id.videoId
+      );
+      newIframe.attr("frameborder", "0");
+      newIframe.attr(
+        "allow",
+        "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+      );
+      newIframe.attr("allowfullscreen");
+      $("#iframe").append(newIframe);
+    }
   });
 }
 
