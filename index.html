@@ -2,6 +2,11 @@
 <html lang="en">
   <head>
     <link rel="stylesheet" href="./assets/style.css" />
+    <!-- Smooth Scroll Library -->
+    <!-- Without Polyfills -->
+    <script src="assets/smoothscroll/smooth-scroll.min.js"></script>
+    <!-- With Polyfills -->
+    <script src="assets/smoothscroll/smooth-scroll.polyfills.min.js"></script>
     <script
       src="https://code.jquery.com/jquery-3.4.1.js"
       integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU="
@@ -38,16 +43,24 @@
       </form>
       <div class="display-none">
         <div id="buttons" class="mb-4">
-          <button type="button" class="btn btn-info Albums">
+          <button type="button" class="btn btn-info Albums" id="albums">
             Albums
           </button>
-          <button type="button" class="btn btn-info Music-vid">
+          <button
+            type="button"
+            class="btn btn-info Music-vid"
+            id="music-videos"
+          >
             Music Videos
           </button>
-          <button type="button" class="btn btn-info Top-songs">
+          <button type="button" class="btn btn-info Top-songs" id="top-songs">
             Top songs
           </button>
-          <button type="button" class="btn btn-info Tour-dates">
+          <button
+            type="button"
+            class="btn btn-info Tour-dates"
+            id="tour-dates-button"
+          >
             Tour dates
           </button>
         </div>
@@ -153,7 +166,7 @@
           <!-- TOP SONGS -->
           <div class="col-md-6">
             <div class="box equal">
-              <h1>
+              <h1 id="top-songs-header">
                 Top songs
               </h1>
               <table class="table">
@@ -195,7 +208,7 @@
       <div class="container  box">
         <div class="row">
           <div class="col-lg-12 rounded">
-            <h1 class="text-center">Music videos</h1>
+            <h1 class="text-center" id="music-videos-header">Music videos</h1>
             <div id="iframe">
               <iframe
                 width="250"
