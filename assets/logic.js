@@ -1,4 +1,42 @@
-// bands in town
+var scroll = new SmoothScroll('a[href*="#"]', {
+  // Selectors
+  ignore: "[data-scroll-ignore]",
+  header: null,
+  topOnEmptyHash: true,
+
+  // Speed & Duration
+  speed: 500,
+  speedAsDuration: false,
+  durationMax: null,
+  durationMin: null,
+  clip: true,
+  offset: 0,
+
+  // Easing
+  easing: "easeInOutCubic",
+  customEasing: null,
+
+  // History
+  updateURL: true,
+  popstate: true,
+
+  // Custom Events
+  emitEvents: true
+});
+
+$("#albums").on("click", function() {
+  scroll.animateScroll(document.querySelector("#carouselExampleControls"));
+});
+$("#music-videos").on("click", function() {
+  scroll.animateScroll(document.querySelector("#music-videos-header"));
+});
+$("#top-songs").on("click", function() {
+  scroll.animateScroll(document.querySelector("#top-songs-header"));
+});
+$("#tour-dates-button").on("click", function() {
+  scroll.animateScroll(document.querySelector("#tour-dates"));
+});
+
 $("#submit-button").on("click", function(e) {
   e.preventDefault();
   $(".display-all").attr("class", "display-none");
