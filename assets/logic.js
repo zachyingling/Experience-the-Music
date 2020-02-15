@@ -1,58 +1,81 @@
 // bands in town
-$("#submit-button").on("click", function(e) {
+$('#submit-button').on('click', function(e) {
   e.preventDefault();
+  $('.display-all').attr('class', 'display-none');
+  $('#tour-dates').empty();
 
-  let artist = $("#input-box").val();
+  let artist = $('#input-box').val();
+
+  //Tour Dates Call - Bandsintown
   var queryURL =
-    "https://rest.bandsintown.com/artists/" +
+    'https://rest.bandsintown.com/artists/' +
     artist +
-    "/events?app_id=codingbootcamp";
+    '/events?app_id=codingbootcamp';
 
-  if (artist === "") {
+  //Artist Bio - Last.fm
+  var queryURL2 =
+    'http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=' +
+    artist +
+    '&api_key=4691f9a2169dfb0d38768c94b462b364&format=json';
+
+  //Napster Call
+  var queryURL3 = `https://api.napster.com/v2.2/search?query=${artist}&type=artist&per_type_limit=1`;
+
+  if (artist === '') {
     // Modal
-    $("#alert-message").text("Please input an artist");
-    $("#alert-message").attr("class", "alert alert-danger display-all");
+    $('#alert-message').text('Please input an artist');
+    $('#alert-message').attr('class', 'alert alert-danger display-all');
     setTimeout(function() {
-      $("#alert-message").attr("class", "alert alert-danger display-none");
+      $('#alert-message').attr('class', 'alert alert-danger display-none');
     }, 5000);
   } else {
     $.ajax({
+      //BandsInTown API
       url: queryURL,
-      method: "GET",
+      method: 'GET',
       error: function() {
-        $("#alert-message").text("Your artist wasn't found.");
-        $("#alert-message").attr("class", "alert alert-danger display-all");
+        $('#alert-message').text("Your artist wasn't found.");
+        $('#alert-message').attr('class', 'alert alert-danger display-all');
         setTimeout(function() {
-          $("#alert-message").attr("class", "alert alert-danger display-none");
+          $('#alert-message').attr('class', 'alert alert-danger display-none');
         }, 5000);
       }
     }).then(function(response) {
+      //Replace this conditional with Last.fm giving no results
+      console.log('Bandsintown');
       console.log(response);
+      // if (response.length === 0) {
+      // $('#alert-message').text("Your artist wasn't found.");
+      // $('#alert-message').attr('class', 'alert alert-danger display-all');
+      // setTimeout(function() {
+      //   $('#alert-message').attr('class', 'alert alert-danger display-none');
+      // }, 5000);
+      // } else {
       // Fix this; response gets a 404 not 0 length
-      $(".display-none").attr("class", "display-all");
-      $("#alert-message").attr("class", "alert alert-danger display-none");
+      $('.display-none').attr('class', 'display-all');
+      $('#alert-message').attr('class', 'alert alert-danger display-none');
       let numEvents = response.length;
       // Putting artist info from bands in town on page
-      $("#img").attr("src", response[0].artist.image_url);
+      $('#img').attr('src', response[0].artist.image_url);
 
       // Adding all of the artists tour dates to the table
       for (let i = 0; i < numEvents; i++) {
-        let newRow = $("<tr>");
-        let newNumber = $("<th>");
+        let newRow = $('<tr>');
+        let newNumber = $('<th>');
         newNumber.text(i + 1);
-        let newDate = $("<td>");
+        let newDate = $('<td>');
         newDate.text(response[i].datetime);
-        let newVenue = $("<td>");
+        let newVenue = $('<td>');
         newVenue.text(response[i].venue.name);
-        let newLocation = $("<td>");
+        let newLocation = $('<td>');
         newLocation.text(
-          response[i].venue.city + ", " + response[i].venue.region
+          response[i].venue.city + ', ' + response[i].venue.region
         );
-        let newTickets = $("<td>");
-        let ticketsAnchor = $("<a>");
-        ticketsAnchor.attr("href", response[i].url);
-        ticketsAnchor.text("Tickets");
-        ticketsAnchor.attr("target", "_blank");
+        let newTickets = $('<td>');
+        let ticketsAnchor = $('<a>');
+        ticketsAnchor.attr('href', response[i].url);
+        ticketsAnchor.text('Tickets');
+        ticketsAnchor.attr('target', '_blank');
         newTickets.append(ticketsAnchor);
 
         newRow.append(newNumber);
@@ -60,52 +83,107 @@ $("#submit-button").on("click", function(e) {
         newRow.append(newVenue);
         newRow.append(newLocation);
         newRow.append(newTickets);
-        $("#tour-dates").append(newRow);
+        $('#tour-dates').append(newRow);
       }
       youtubeCall();
+      // }
+    });
+    //Last.fm API
+    $.ajax({
+      url: queryURL2,
+      method: 'GET',
+      error: function() {
+        console.log('Last.fm Error');
+      }
+    }).then(function(response) {
+      console.log('Last.fm');
+      console.log(response);
+      $('#bio').html(response.artist.bio.summary);
+    });
+
+    //Napster API
+    $.ajax({
+      headers: {
+        apikey: 'ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx'
+      },
+      url: queryURL3,
+      method: 'GET',
+      error: function(xhr, status, error) {
+        var err = JSON.parse(xhr.responseText);
+        console.log(err.Message);
+        console.log(status);
+        console.log(error);
+        console.log('Napster Error');
+        console.log(queryURL3);
+      }
+    }).then(function(response) {
+      console.log('Napster');
+      console.log(response);
+      console.log('ARTIST-ID: ' + response.search.data.artists[0].id);
+      // console.log(response.search.data.artists[0].links.images.href);
+      // console.log(response.search.data.artists[0].links.albums.href);
+      // console.log(response.search.data.artists[0].links.topTracks.href);
+      // console.log(response.search.data.artists[0].bios[0].bio);
     });
   }
 });
+
+//NAPSTER API LINKS
+// TOP 5 TRACKS: Ajax call returns object
+// https://api.napster.com/v2.2/artists/{ARTIST-ID}/tracks/top?limit=5
+// ARTIST IMAGE: Direct link to image
+// https://api.napster.com/imageserver/v2/artists/{ARTIST-ID}/images/633x422.jpg
+// ARTIST ALBUMS - Ajax call returns top albums with individual IDs and info
+// https://api.napster.com/v2.2/artists/{ARTIST-ID/albums/top (?limit=#)<-optional
+// ALBUM INFO - ajax call that shows all album info
+// https://api.napster.com/v2.2/albums/{ALBUM-ID}
+// ALBUM IMAGES - ajax call that returns several image links
+// https://api.napster.com/v2.2/albums/{ALBUM-ID}/images
+// ALBUM TRACKS -ajax call that returns album track info
+// https://api.napster.com/v2.2/albums/{ALBUM-ID}/tracks
+
+//Maybe we can load all this data into one giant object for each search and output it all to the DOM? The rate limit is 500 request per second..so we can go nuts if we want
 
 // Youtube functionality
 function youtubeCall() {
   //prepare the request
   var request = gapi.client.youtube.search.list({
-    part: "snippet",
-    type: "video",
-    q: encodeURIComponent($("#input-box").val()).replace(/%20/g, "+"),
+    part: 'snippet',
+    type: 'video',
+    q: encodeURIComponent($('#input-box').val()).replace(/%20/g, '+'),
     maxResults: 5,
-    order: "viewCount"
+    order: 'viewCount'
   });
   //execute request
   request.execute(function(response) {
+    console.log('YouTube');
     console.log(response);
-    console.log(response.items[0].id.videoId);
+    // console.log(response.items[0].id.videoId);
 
     // Making a new iframe
-    $("#iframe").empty();
+    $('#iframe').empty();
     for (let i = 0; i < response.items.length; i++) {
-      let newIframe = $("<iframe>");
-      newIframe.attr("width", "250");
-      newIframe.attr("height", "150");
+      let newIframe = $('<iframe>');
+      newIframe.attr('width', '250');
+      newIframe.attr('height', '150');
       newIframe.attr(
-        "src",
-        "https://www.youtube.com/embed/" + response.items[i].id.videoId
+        'src',
+        'https://www.youtube.com/embed/' + response.items[i].id.videoId
       );
-      newIframe.attr("frameborder", "0");
+      newIframe.attr('frameborder', '0');
       newIframe.attr(
-        "allow",
-        "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+        'allow',
+        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
       );
-      newIframe.attr("allowfullscreen");
-      $("#iframe").append(newIframe);
+      newIframe.attr('allowfullscreen');
+      $('#iframe').append(newIframe);
     }
   });
 }
 
 function init() {
-  gapi.client.setApiKey("AIzaSyApyK0pdQLdwW4lBRGeKowZn5DG1h4l7Do");
-  gapi.client.load("youtube", "v3", function() {
+  gapi.client.setApiKey('AIzaSyApyK0pdQLdwW4lBRGeKowZn5DG1h4l7Do');
+  gapi.client.load('youtube', 'v3', function() {
     //yt api is ready
   });
 }
