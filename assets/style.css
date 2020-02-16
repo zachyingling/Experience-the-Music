@@ -23,6 +23,10 @@
   margin-bottom: 20px;
 }
 
+#inputForm {
+  margin-bottom: 20px;
+}
+
 /* Img/Bio Section */
 .bioDiv {
   margin-right: 30px;
@@ -39,11 +43,21 @@
   height: 300px;
 }
 
-/* Carousel */
+/* Carousel/Top Songs */
 .d-flex {
   padding-left: 0px;
   padding-right: 0px;
 }
+
+#topAlbums {
+  margin-bottom: 30px;
+}
+
+#topSongs {
+  margin-top: 70px;
+  margin-bottom: 30px;
+}
+
 .equal {
   height: 95%;
 }
@@ -65,4 +79,10 @@ iframe {
   margin-right: 10px;
   margin-top: 5px;
   margin-bottom: 5px;
+}
+
+/* Tour Dates */
+
+.tickets {
+  color: navy;
 }
