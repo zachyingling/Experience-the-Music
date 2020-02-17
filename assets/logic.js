@@ -65,95 +65,112 @@ $("#submit-button").on("click", function(e) {
       $("#alert-message").attr("class", "alert alert-danger display-none");
     }, 5000);
   } else {
-    //BandsInTown API
     $.ajax({
-      url: queryURL,
-      method: "GET",
-      error: function() {
+      url:
+        "http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=" +
+        artist +
+        "&api_key=4691f9a2169dfb0d38768c94b462b364&format=json",
+      method: "GET"
+    }).then(function(response) {
+      console.log("last fm");
+      console.log(response);
+      if (response.error === 6) {
         $("#alert-message").text("Your artist wasn't found.");
         $("#alert-message").attr("class", "alert alert-danger display-all");
         setTimeout(function() {
           $("#alert-message").attr("class", "alert alert-danger display-none");
         }, 5000);
+      } else {
+        $("#bio").html(response.artist.bio.summary);
+        bandsInTownCall();
       }
-    }).then(function(response) {
-      console.log("Bandsintown");
-      console.log(response);
-      //
-      // new conditonal needed here
-      // nirvana, soundgarden, the beatles.. etc
-      // bands with dead members don't work
-      //
-      // if () {
-      // return;
-      // } else {
-      $(".display-none").attr("class", "display-all");
-      $("#alert-message").attr("class", "alert alert-danger display-none");
-      let numEvents = response.length;
-      // Putting artist info from bands in town on page
-
-      // Adding all of the artists tour dates to the table
-      for (let i = 0; i < numEvents; i++) {
-        let newRow = $("<tr>");
-        let newNumber = $("<th>");
-        newNumber.text(i + 1);
-        let newDate = $("<td>");
-        newDate.text(response[i].datetime);
-        let newVenue = $("<td>");
-        newVenue.text(response[i].venue.name);
-        let newLocation = $("<td>");
-        newLocation.text(
-          response[i].venue.city + ", " + response[i].venue.region
-        );
-        let newTickets = $("<td>");
-        let ticketsAnchor = $("<a>");
-        ticketsAnchor.attr("href", response[i].url);
-        ticketsAnchor.text("Tickets");
-        ticketsAnchor.attr("target", "_blank");
-        ticketsAnchor.attr("class", "tickets");
-        newTickets.append(ticketsAnchor);
-        newRow.append(newNumber);
-        newRow.append(newDate);
-        newRow.append(newVenue);
-        newRow.append(newLocation);
-        newRow.append(newTickets);
-        $("#tour-dates").append(newRow);
-      }
-      youtubeCall();
-      // }
     });
+
+    //BandsInTown API
+    function bandsInTownCall() {
+      $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) {
+        console.log("Bandsintown");
+        console.log(response);
+        //
+        // new conditonal needed here
+        // nirvana, soundgarden, the beatles.. etc
+        // bands with dead members don't work
+        //
+        $(".display-none").attr("class", "display-all");
+        $("#alert-message").attr("class", "alert alert-danger display-none");
+        let numEvents = response.length;
+        // Putting artist info from bands in town on page
+
+        // Adding all of the artists tour dates to the table
+        for (let i = 0; i < numEvents; i++) {
+          let newRow = $("<tr>");
+          let newNumber = $("<th>");
+          newNumber.text(i + 1);
+          let newDate = $("<td>");
+          let dateText = response[i].datetime;
+          let tempDate = new Date(dateText);
+          newDate.text(tempDate);
+          let newVenue = $("<td>");
+          newVenue.text(response[i].venue.name);
+          let newLocation = $("<td>");
+          newLocation.text(
+            response[i].venue.city + ", " + response[i].venue.region
+          );
+          let newTickets = $("<td>");
+          let ticketsAnchor = $("<a>");
+          ticketsAnchor.attr("href", response[i].url);
+          ticketsAnchor.text("Tickets");
+          ticketsAnchor.attr("target", "_blank");
+          ticketsAnchor.attr("class", "tickets");
+          newTickets.append(ticketsAnchor);
+          newRow.append(newNumber);
+          newRow.append(newDate);
+          newRow.append(newVenue);
+          newRow.append(newLocation);
+          newRow.append(newTickets);
+          $("#tour-dates").append(newRow);
+        }
+        youtubeCall();
+        napsterCall();
+      });
+    }
 
     //Napster API
-    $.ajax({
-      headers: {
-        apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
-      },
-      url: `https://api.napster.com/v2.2/search?query=${artist}&type=artist&per_type_limit=1`,
-      method: "GET",
-      async: false,
-      error: function(xhr, status, error) {
-        var err = JSON.parse(xhr.responseText);
-        console.log(err.Message);
-        console.log(status);
-        console.log(error);
-        console.log("Napster Error");
-      }
-    }).then(function(response) {
-      console.log("Napster");
-      console.log(response);
-      artistID = response.search.data.artists[0].id;
-      console.log("ARTIST-ID: " + artistID);
-      $("#img").attr(
-        "src",
-        `https://api.napster.com/imageserver/v2/artists/${artistID}/images/633x422.jpg`
-      );
-      $("#bio").html(response.search.data.artists[0].bios[0].bio);
-      tracks(artistID);
-      albums(artistID);
-    });
+    function napsterCall() {
+      $.ajax({
+        headers: {
+          apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
+        },
+        url: `https://api.napster.com/v2.2/search?query=${artist}&type=artist&per_type_limit=1`,
+        method: "GET",
+        async: false,
+        error: function(xhr, status, error) {
+          var err = JSON.parse(xhr.responseText);
+          console.log(err.Message);
+          console.log(status);
+          console.log(error);
+          console.log("Napster Error");
+        }
+      }).then(function(response) {
+        console.log("Napster");
+        console.log(response);
+        artistID = response.search.data.artists[0].id;
+        console.log("ARTIST-ID: " + artistID);
+        $("#img").attr(
+          "src",
+          `https://api.napster.com/imageserver/v2/artists/${artistID}/images/633x422.jpg`
+        );
+        tracks(artistID);
+        albums(artistID);
+      });
+    }
 
     // Top 5 tracks
     function tracks(x) {
+      console.log("top songs");
       $.ajax({
         headers: {
           apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
