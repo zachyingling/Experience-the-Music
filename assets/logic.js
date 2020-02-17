@@ -1,6 +1,6 @@
 var scroll = new SmoothScroll('a[href*="#"]', {
   // Selectors
-  ignore: '[data-scroll-ignore]',
+  ignore: "[data-scroll-ignore]",
   header: null,
   topOnEmptyHash: true,
 
@@ -13,7 +13,7 @@ var scroll = new SmoothScroll('a[href*="#"]', {
   offset: 0,
 
   // Easing
-  easing: 'easeInOutCubic',
+  easing: "easeInOutCubic",
   customEasing: null,
 
   // History
@@ -24,60 +24,60 @@ var scroll = new SmoothScroll('a[href*="#"]', {
   emitEvents: true
 });
 
-$('#albums').on('click', function() {
-  scroll.animateScroll(document.querySelector('#carouselExampleControls'));
+$("#albums").on("click", function() {
+  scroll.animateScroll(document.querySelector("#carouselExampleControls"));
 });
-$('#music-videos').on('click', function() {
-  scroll.animateScroll(document.querySelector('#music-videos-header'));
+$("#music-videos").on("click", function() {
+  scroll.animateScroll(document.querySelector("#music-videos-header"));
 });
-$('#top-songs').on('click', function() {
-  scroll.animateScroll(document.querySelector('#top-songs-header'));
+$("#top-songs").on("click", function() {
+  scroll.animateScroll(document.querySelector("#topSongs"));
 });
-$('#tour-dates-button').on('click', function() {
-  scroll.animateScroll(document.querySelector('#tour-dates'));
+$("#tour-dates-button").on("click", function() {
+  scroll.animateScroll(document.querySelector("#tour-dates"));
 });
 
-var artistID = '';
-var audioElement = '';
+var artistID = "";
+var audioElement = "";
 var albumIDs = [];
 
-$('#submit-button').on('click', function(e) {
+$("#submit-button").on("click", function(e) {
   e.preventDefault();
-  $('.display-all').attr('class', 'display-none');
-  $('#tour-dates').empty();
-  $('#trackTable').empty();
-  $('.carousel-inner').empty();
+  $(".display-all").attr("class", "display-none");
+  $("#tour-dates").empty();
+  $("#trackTable").empty();
+  $(".carousel-inner").empty();
   albumIDs = [];
 
-  let artist = $('#input-box').val();
+  let artist = $("#input-box").val();
 
   //Tour Dates Call - Bandsintown
   var queryURL =
-    'https://rest.bandsintown.com/artists/' +
+    "https://rest.bandsintown.com/artists/" +
     artist +
-    '/events?app_id=codingbootcamp';
+    "/events?app_id=codingbootcamp";
 
-  if (artist === '') {
+  if (artist === "") {
     // Modal
-    $('#alert-message').text('Please input an artist');
-    $('#alert-message').attr('class', 'alert alert-danger display-all');
+    $("#alert-message").text("Please input an artist");
+    $("#alert-message").attr("class", "alert alert-danger display-all");
     setTimeout(function() {
-      $('#alert-message').attr('class', 'alert alert-danger display-none');
+      $("#alert-message").attr("class", "alert alert-danger display-none");
     }, 5000);
   } else {
     //BandsInTown API
     $.ajax({
       url: queryURL,
-      method: 'GET',
+      method: "GET",
       error: function() {
-        $('#alert-message').text("Your artist wasn't found.");
-        $('#alert-message').attr('class', 'alert alert-danger display-all');
+        $("#alert-message").text("Your artist wasn't found.");
+        $("#alert-message").attr("class", "alert alert-danger display-all");
         setTimeout(function() {
-          $('#alert-message').attr('class', 'alert alert-danger display-none');
+          $("#alert-message").attr("class", "alert alert-danger display-none");
         }, 5000);
       }
     }).then(function(response) {
-      console.log('Bandsintown');
+      console.log("Bandsintown");
       console.log(response);
       //
       // new conditonal needed here
@@ -87,37 +87,37 @@ $('#submit-button').on('click', function(e) {
       // if () {
       // return;
       // } else {
-      $('.display-none').attr('class', 'display-all');
-      $('#alert-message').attr('class', 'alert alert-danger display-none');
+      $(".display-none").attr("class", "display-all");
+      $("#alert-message").attr("class", "alert alert-danger display-none");
       let numEvents = response.length;
       // Putting artist info from bands in town on page
 
       // Adding all of the artists tour dates to the table
       for (let i = 0; i < numEvents; i++) {
-        let newRow = $('<tr>');
-        let newNumber = $('<th>');
+        let newRow = $("<tr>");
+        let newNumber = $("<th>");
         newNumber.text(i + 1);
-        let newDate = $('<td>');
+        let newDate = $("<td>");
         newDate.text(response[i].datetime);
-        let newVenue = $('<td>');
+        let newVenue = $("<td>");
         newVenue.text(response[i].venue.name);
-        let newLocation = $('<td>');
+        let newLocation = $("<td>");
         newLocation.text(
-          response[i].venue.city + ', ' + response[i].venue.region
+          response[i].venue.city + ", " + response[i].venue.region
         );
-        let newTickets = $('<td>');
-        let ticketsAnchor = $('<a>');
-        ticketsAnchor.attr('href', response[i].url);
-        ticketsAnchor.text('Tickets');
-        ticketsAnchor.attr('target', '_blank');
-        ticketsAnchor.attr('class', 'tickets');
+        let newTickets = $("<td>");
+        let ticketsAnchor = $("<a>");
+        ticketsAnchor.attr("href", response[i].url);
+        ticketsAnchor.text("Tickets");
+        ticketsAnchor.attr("target", "_blank");
+        ticketsAnchor.attr("class", "tickets");
         newTickets.append(ticketsAnchor);
         newRow.append(newNumber);
         newRow.append(newDate);
         newRow.append(newVenue);
         newRow.append(newLocation);
         newRow.append(newTickets);
-        $('#tour-dates').append(newRow);
+        $("#tour-dates").append(newRow);
       }
       youtubeCall();
       // }
@@ -126,28 +126,28 @@ $('#submit-button').on('click', function(e) {
     //Napster API
     $.ajax({
       headers: {
-        apikey: 'ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx'
+        apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
       },
       url: `https://api.napster.com/v2.2/search?query=${artist}&type=artist&per_type_limit=1`,
-      method: 'GET',
+      method: "GET",
       async: false,
       error: function(xhr, status, error) {
         var err = JSON.parse(xhr.responseText);
         console.log(err.Message);
         console.log(status);
         console.log(error);
-        console.log('Napster Error');
+        console.log("Napster Error");
       }
     }).then(function(response) {
-      console.log('Napster');
+      console.log("Napster");
       console.log(response);
       artistID = response.search.data.artists[0].id;
-      console.log('ARTIST-ID: ' + artistID);
-      $('#img').attr(
-        'src',
+      console.log("ARTIST-ID: " + artistID);
+      $("#img").attr(
+        "src",
         `https://api.napster.com/imageserver/v2/artists/${artistID}/images/633x422.jpg`
       );
-      $('#bio').html(response.search.data.artists[0].bios[0].bio);
+      $("#bio").html(response.search.data.artists[0].bios[0].bio);
       tracks(artistID);
       albums(artistID);
     });
@@ -156,30 +156,30 @@ $('#submit-button').on('click', function(e) {
     function tracks(x) {
       $.ajax({
         headers: {
-          apikey: 'ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx'
+          apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
         },
         url:
-          'https://api.napster.com/v2.2/artists/' + x + '/tracks/top?limit=5',
-        method: 'GET',
+          "https://api.napster.com/v2.2/artists/" + x + "/tracks/top?limit=5",
+        method: "GET",
         error: function(xhr, status, error) {
           var err = JSON.parse(xhr.responseText);
           console.log(err.Message);
           console.log(status);
           console.log(error);
-          console.log('Tracks Error');
+          console.log("Tracks Error");
         }
       }).then(function(response) {
         console.log(response);
         for (i = 0; i < response.tracks.length; i++) {
-          $('#trackTable').append('<tr class="track' + i + '"></tr>');
-          $('.track' + i).append('<th scope="row">' + (i + 1) + '</th>');
-          $('.track' + i).append('<td>' + response.tracks[i].name + '</td>');
-          $('.track' + i).append(
-            '<td>' + response.tracks[i].albumName + '</td>'
+          $("#trackTable").append('<tr class="track' + i + '"></tr>');
+          $(".track" + i).append('<th scope="row">' + (i + 1) + "</th>");
+          $(".track" + i).append("<td>" + response.tracks[i].name + "</td>");
+          $(".track" + i).append(
+            "<td>" + response.tracks[i].albumName + "</td>"
           );
-          audioElement = document.createElement('audio');
+          audioElement = document.createElement("audio");
 
-          $('.track' + i).append(
+          $(".track" + i).append(
             '<td><button class="audio" data-play="' +
               response.tracks[i].previewURL +
               '">Preview</button></td>'
@@ -192,16 +192,16 @@ $('#submit-button').on('click', function(e) {
     function albums(x) {
       $.ajax({
         headers: {
-          apikey: 'ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx'
+          apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
         },
         url: `https://api.napster.com/v2.2/artists/${x}/albums/top?limit=5`,
-        method: 'GET',
+        method: "GET",
         error: function(xhr, status, error) {
           var err = JSON.parse(xhr.responseText);
           console.log(err.Message);
           console.log(status);
           console.log(error);
-          console.log('AlbumID Error');
+          console.log("AlbumID Error");
         }
       }).then(function(response) {
         console.log(response);
@@ -219,32 +219,32 @@ $('#submit-button').on('click', function(e) {
       for (let j = 0; j < albumIDs.length; j++) {
         $.ajax({
           headers: {
-            apikey: 'ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx'
+            apikey: "ZTMwYmI4NjYtZTQ2OS00ZTA1LWE4OTQtYWE5NGFjYjkwYmEx"
           },
           url: `https://api.napster.com/v2.2/albums/${albumIDs[j]}/images`,
-          method: 'GET',
+          method: "GET",
           error: function(xhr, status, error) {
             var err = JSON.parse(xhr.responseText);
             console.log(err.Message);
             console.log(status);
             console.log(error);
-            console.log('AlbumImage Error');
+            console.log("AlbumImage Error");
           }
         }).then(function(response) {
           console.log(response.images[4].url);
           console.log(j);
           let item = $('<div class="carousel-item">');
           if (j === 1) {
-            item.attr('class', 'carousel-item active');
+            item.attr("class", "carousel-item active");
           } else {
-            item.attr('class', 'carousel-item');
+            item.attr("class", "carousel-item");
           }
-          let tag = $('<img>');
-          tag.attr('src', response.images[4].url);
-          tag.attr('class', 'd-block w-100 c-img');
-          tag.attr('alt', '');
+          let tag = $("<img>");
+          tag.attr("src", response.images[4].url);
+          tag.attr("class", "d-block w-100 c-img");
+          tag.attr("alt", "");
           item.append(tag);
-          $('.carousel-inner').append(item);
+          $(".carousel-inner").append(item);
         });
       }
     }
@@ -252,9 +252,9 @@ $('#submit-button').on('click', function(e) {
   }
 });
 
-$(document).on('click', '.audio', function() {
+$(document).on("click", ".audio", function() {
   console.log(this);
-  audioElement.setAttribute('src', $(this).attr('data-play'));
+  audioElement.setAttribute("src", $(this).attr("data-play"));
   audioElement.play();
 });
 
@@ -278,45 +278,45 @@ $(document).on('click', '.audio', function() {
 function youtubeCall() {
   //prepare the request
   var request = gapi.client.youtube.search.list({
-    part: 'snippet',
-    type: 'video',
-    q: encodeURIComponent($('#input-box').val() + ' official').replace(
+    part: "snippet",
+    type: "video",
+    q: encodeURIComponent($("#input-box").val() + " official").replace(
       /%20/g,
-      '+'
+      "+"
     ),
     maxResults: 5,
-    order: 'viewCount'
+    order: "viewCount"
   });
   //execute request
   request.execute(function(response) {
-    console.log('YouTube');
+    console.log("YouTube");
     console.log(response);
     // console.log(response.items[0].id.videoId);
 
     // Making a new iframe
-    $('#iframe').empty();
+    $("#iframe").empty();
     for (let i = 0; i < response.items.length; i++) {
-      let newIframe = $('<iframe>');
-      newIframe.attr('width', '250');
-      newIframe.attr('height', '150');
+      let newIframe = $("<iframe>");
+      newIframe.attr("width", "250");
+      newIframe.attr("height", "150");
       newIframe.attr(
-        'src',
-        'https://www.youtube.com/embed/' + response.items[i].id.videoId
+        "src",
+        "https://www.youtube.com/embed/" + response.items[i].id.videoId
       );
-      newIframe.attr('frameborder', '0');
+      newIframe.attr("frameborder", "0");
       newIframe.attr(
-        'allow',
-        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
+        "allow",
+        "accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
       );
-      newIframe.attr('allowfullscreen');
-      $('#iframe').append(newIframe);
+      newIframe.attr("allowfullscreen");
+      $("#iframe").append(newIframe);
     }
   });
 }
 
 function init() {
-  gapi.client.setApiKey('AIzaSyApyK0pdQLdwW4lBRGeKowZn5DG1h4l7Do');
-  gapi.client.load('youtube', 'v3', function() {
+  gapi.client.setApiKey("AIzaSyApyK0pdQLdwW4lBRGeKowZn5DG1h4l7Do");
+  gapi.client.load("youtube", "v3", function() {
     //yt api is ready
   });
 }
