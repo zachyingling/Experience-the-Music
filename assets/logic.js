@@ -67,7 +67,7 @@ $("#submit-button").on("click", function(e) {
   } else {
     $.ajax({
       url:
-        "http://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=" +
+        "https://ws.audioscrobbler.com/2.0/?method=artist.getInfo&artist=" +
         artist +
         "&api_key=4691f9a2169dfb0d38768c94b462b364&format=json",
       method: "GET"
